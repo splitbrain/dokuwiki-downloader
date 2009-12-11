@@ -4,7 +4,7 @@
  * the browser. It will download and extract DokuWiki for you
  */
 
-$VERSION = '2009-02-14'; // the DokuWiki version to be downloaded
+$VERSION = 'rc2009-12-02'; // the DokuWiki version to be downloaded
 
 // these are *very* relaxed permissions by default. They make sure you will
 // be able to delete or update your wiki through FTP.
