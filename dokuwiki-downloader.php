@@ -1473,7 +1473,8 @@ function step3(){
         say('Extraction failed');
         html_footer();
     }
-    $ok = $tar->Extract(FULL_ARCHIVE,"$INSTALL_DIR/",'dokuwiki-'.$VERSION.'/',$FPERM);
+    $dir = preg_replace('/[a-z]+$/','',$VERSION); // remove hotfix letters
+    $ok = $tar->Extract(FULL_ARCHIVE,"$INSTALL_DIR/",'dokuwiki-'.$dir.'/',$FPERM);
     if($ok < 1){
         say($tar->TarErrorStr($ok));
         say('Extraction failed');
