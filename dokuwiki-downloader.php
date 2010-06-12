@@ -4,7 +4,7 @@
  * the browser. It will download and extract DokuWiki for you
  */
 
-$VERSION = '2009-12-25c'; // the DokuWiki version to be downloaded
+$TAG = 'stable'; // the DokuWiki version to be downloaded
 
 // these are *very* relaxed permissions by default. They make sure you will
 // be able to delete or update your wiki through FTP.
@@ -292,13 +292,13 @@ class TarLib
    * permission in octal mode (prefixed with a 0) that will be given on each
    * extracted file.
    */
-  function Extract($p_what = FULL_ARCHIVE, $p_to = '.', $p_remdir='', $p_mode = 0755)
+  function Extract($p_what = FULL_ARCHIVE, $p_to = '.', $p_remdir='', $p_mode = 0755, $skip = '')
   {
     if(!$this->_OpenRead()) return -4;
 //  if(!@is_dir($p_to)) if(!@mkdir($p_to, 0777)) return -8;   --CS
     if(!@is_dir($p_to)) if(!$this->_dirApp($p_to)) return -8;   //--CS (route through correct dir fn)
 
-    $ok = $this->_extractList($p_to, $p_what, $p_remdir, $p_mode);
+    $ok = $this->_extractList($p_to, $p_what, $p_remdir, $p_mode, $skip);
     $this->_CompTar();
 
     return $ok;
@@ -804,13 +804,17 @@ $p_add, $p_rem);
     $this->_write(pack("a512", ""));
   }
 
-  function _extractList($p_to, $p_files, $p_remdir, $p_mode = 0755)
+  function _stripdir($dir,$num){
+    $parts = explode('/',$dir);
+    for($i=0; $i<$num; $i++) array_shift($parts);
+    return join('/',$parts);
+  }
+
+  function _extractList($p_to, $p_files, $p_remdir, $p_mode = 0755, $skip)
   {
     if (!$p_to || ($p_to[0]!="/"&&substr($p_to,0,3)!="../"&&substr($p_to,1,2)!=":\\")) /*" // <- PHP Coder bug */
       $p_to = "./$p_to";
 
-    if ($p_remdir && substr($p_remdir,-1)!='/') $p_remdir .= '/';
-    $p_remdirs = strlen($p_remdir);
     while($dat = $this->_read(512))
     {
       $headers = $this->_readHeader($dat);
@@ -837,10 +841,9 @@ $p_add, $p_rem);
       if ($extract)
       {
         $det[] = $headers;
-        if ($p_remdir && substr($headers['filename'],0,$p_remdirs)==$p_remdir)
-          $headers['filename'] = substr($headers['filename'],$p_remdirs);
-
-        if($headers['filename'].'/' == $p_remdir && $headers['typeflag']=='5') continue;
+        $headers['filename'] = $this->_stripdir($headers['filename'],(int) $p_remdir);
+        if($headers['filename'] == '' || $headers['filename'] == '/') continue;
+        if($skip && preg_match($skip,$headers['filename'])) continue;
 
         if ($p_to != "./" && $p_to != "/")
         {
@@ -1400,10 +1403,10 @@ function say($msg){
 
 function step1(){
     global $INSTALL_DIR;
-    global $VERSION;
+    global $TAG;
 
     if(!isset($_GET['go'])){
-        say("<p>This script will download <strong>DokuWiki $VERSION</strong> to your webserver
+        say("<p>This script will download <strong>DokuWiki $TAG</strong> to your webserver
              and install it in <strong>$INSTALL_DIR</strong>. If this is not the directory
              you want to install to, move this script to the target directory</p>
              <form method=\"get\" action=\"\">
@@ -1435,7 +1438,7 @@ function step2(){
     $data = $http->get($DOWNLOAD);
     if(!$data){
         say($http->error);
-        say("Download failed. Try to upload the .tgz yourself.");
+        say("Download failed. Try to upload $TGZ yourself.");
         html_footer();
     }
 
@@ -1474,7 +1477,7 @@ function step3(){
         html_footer();
     }
     $dir = preg_replace('/[a-z]+$/','',$VERSION); // remove hotfix letters
-    $ok = $tar->Extract(FULL_ARCHIVE,"$INSTALL_DIR/",'dokuwiki-'.$dir.'/',$FPERM);
+    $ok = $tar->Extract(FULL_ARCHIVE,"$INSTALL_DIR/",1,$FPERM,'/^(_cs|_test)/');
     if($ok < 1){
         say($tar->TarErrorStr($ok));
         say('Extraction failed');
@@ -1520,9 +1523,9 @@ function step4(){
 // --------------------------------------------------------------------------
 
 // initialize
-$DOWNLOAD    = 'http://www.splitbrain.org/_media/projects/dokuwiki/dokuwiki-'.$VERSION.'.tgz';
+$DOWNLOAD    = 'http://github.com/splitbrain/dokuwiki/tarball/'.$TAG;
 $INSTALL_DIR = dirname(__FILE__);
-$TGZ         = "$INSTALL_DIR/dokuwiki-$VERSION.tgz";
+$TGZ         = "$INSTALL_DIR/dokuwiki-$TAG.tgz";
 
 if(defined('E_DEPRECATED')){ // since php 5.3
     error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
