@@ -313,7 +313,7 @@ class TarLib
    * contents are only stored in memory. This function should not be used to
    * add files to an existing archive, you should use Add() instead.
    *
-   * The FileList supports actually three différents modes :
+   * The FileList supports actually three diffÃ©rents modes :
    *
    * - You can pass a string containing filenames separated by pipes '|'.
    *   In this case the file are read from the webserver filesystem and the
@@ -1140,7 +1140,7 @@ class HTTPClient {
         $this->resp_headers = $this->_parseHeaders($r_headers);
         if(isset($this->resp_headers['set-cookie'])){
             foreach ((array) $this->resp_headers['set-cookie'] as $c){
-                list($key, $value, $foo) = split('=', $cookie);
+                list($key, $value, $foo) = explode('=', $cookie);
                 $this->cookies[$key] = $value;
             }
         }
