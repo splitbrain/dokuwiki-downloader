@@ -1,0 +1,21 @@
+language: php
+sudo: false
+php:
+  - "5.3"
+matrix:
+  include:
+    - php: 5.3
+      dist: precise
+script:
+  - php build.php
+branches:
+  except:
+    - release
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $DEPLOYTOKEN
+  target-branch: master
+  local-dir: dist
+  on:
+    branch: devel
