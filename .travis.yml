@@ -1,11 +1,7 @@
 language: php
 sudo: false
 php:
-  - "5.3"
-matrix:
-  include:
-    - php: 5.3
-      dist: precise
+  - "5.6"
 script:
   - composer install --no-dev
   - php build.php
