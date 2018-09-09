@@ -7,6 +7,7 @@ matrix:
     - php: 5.3
       dist: precise
 script:
+  - composer install --no-dev
   - php build.php
 branches:
   except:
