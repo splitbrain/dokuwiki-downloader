@@ -258,5 +258,8 @@ class GUI
         echo 'If you can\'t figure it out, maybe ask in the ';
         echo '<a href="https://forum.dokuwiki.org">Forum</a>?</p>';
         echo '</blockquote>';
+        echo '<script type="application/javascript">';
+        echo 'stopTimer();';
+        echo '</script>';
     }
 }
