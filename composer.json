@@ -1,0 +1,15 @@
+{
+    "name": "splitbrain/dokuwiki-downloader",
+    "description": "Download DokuWiki automatically",
+    "type": "project",
+    "license": "GPL",
+    "authors": [
+        {
+            "name": "Andreas Gohr",
+            "email": "andi@splitbrain.org"
+        }
+    ],
+    "require": {
+        "splitbrain/php-archive": "^1.0"
+    }
+}
