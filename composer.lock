@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "splitbrain/php-archive",
-            "version": "1.1.0",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/splitbrain/php-archive.git",
-                "reference": "cabfd12a408d87d9172ec36a30e2a25c06dbddd2"
+                "reference": "10d89013572ba1f4d4ad7fcb74860242f4c3860b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/splitbrain/php-archive/zipball/cabfd12a408d87d9172ec36a30e2a25c06dbddd2",
-                "reference": "cabfd12a408d87d9172ec36a30e2a25c06dbddd2",
+                "url": "https://api.github.com/repos/splitbrain/php-archive/zipball/10d89013572ba1f4d4ad7fcb74860242f4c3860b",
+                "reference": "10d89013572ba1f4d4ad7fcb74860242f4c3860b",
                 "shasum": ""
             },
             "require": {
@@ -58,7 +58,7 @@
                 "unzip",
                 "zip"
             ],
-            "time": "2018-06-12T20:09:13+00:00"
+            "time": "2018-09-09T12:13:53+00:00"
         }
     ],
     "packages-dev": [],
